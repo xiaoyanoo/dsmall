@@ -1,0 +1,54 @@
+{extend name="default/base/base_home" /}
+{block name="mall_main"}
+
+<div class="dsh-container wrapper">
+    <div class="dsh-all-menu">
+        <ul class="tab-bar">
+            <li class="current"><a href="javascript:void(0);">{$Think.lang.category_all_categories}</a></li>
+            <li><a href="{:url('Brand/index')}">{$Think.lang.category_all_brands}</a></li>
+            <li><a href="{:url('Search/index')}">{$Think.lang.category_all_products}</a></li>
+            <li><a href="{:url('Category/store')}">{$Think.lang.category_all_store_categories}</a></li>
+        </ul>
+    </div>
+    <div class="all-category-items">
+        <ul>
+            {notempty name='header_categories'}  
+            {foreach $header_categories as $gc_list}  
+            <li class="category-list"> <a href='#cate-{$gc_list.gc_id}'>{$gc_list.gc_name}</a> </li>
+            {/foreach}
+            {/notempty}
+        </ul>
+    </div>
+    <div class="all-warpper">
+        {notempty name='header_categories'}  
+        {foreach $header_categories as $gc_list}  
+        <div class="all-category-floor" id='cate-{$gc_list.gc_id}'>
+            <div class="floor-top">
+                <div class="title"><a href="{:url('Search/index',['cate_id'=>$gc_list.gc_id])}">{$gc_list.gc_name}</a></div>
+            </div>
+            {notempty name='gc_list.class2'}  
+            <div class="floor-bot">
+                <div class="floor-category-list"> 
+                    {foreach $gc_list.class2 as $gc_list2}  
+                    <dl>
+                        <dt> <a href="{:url('Search/index',['cate_id'=>$gc_list2.gc_id])}" target="_blank">{$gc_list2.gc_name}</a> </dt>
+                        <dd> 
+                            {notempty name='gc_list2.class3'}  
+                            {foreach $gc_list2.class3 as $gc_list3}  
+                            <a href="{:url('Search/index',['cate_id'=>$gc_list3.gc_id])}" target="_blank">{$gc_list3.gc_name}</a> 
+                            {/foreach}
+                            {/notempty}
+                        </dd>
+                    </dl>
+                    {/foreach}
+                </div>
+            </div>
+            {/notempty}
+        </div>
+        {/foreach}
+        {/notempty}
+    </div>
+</div>
+
+{/block}
+

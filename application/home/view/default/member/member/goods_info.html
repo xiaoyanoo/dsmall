@@ -1,0 +1,61 @@
+<div id="favoritesGoods" class="double">
+  <div class="outline">
+    <div class="title">
+      <h3>{$Think.lang.ds_merchandise_collection}</h3>
+    </div>
+    {notempty name="favorites_list"}
+    <div class="dsm-favorites-goods">
+      <ul id="favoritesGoodsList" class="ds-carousel-skin">
+        {foreach name="favorites_list" item="favorites" }
+        <li>
+          <div class="dsm-goods-thumb-120"><a href="{:url('Goods/index',['goods_id'=>$favorites.goods.goods_id])}" target="_blank"><img alt="" src="{:goods_thumb($favorites['goods'], 240)}"></a>
+            <div class="dsm-goods-price"><em>￥{:ds_price_format($favorites['goods']['goods_price'])}</em></div>
+          </div>
+          <div class="dsm-goods-name"><a href="{:url('Goods/index',['goods_id'=>$favorites.goods.goods_id])}" title="{$favorites.goods.goods_name}" target="_blank">{$favorites.goods.goods_name}</a></div>
+        </li>
+        {/foreach}
+      </ul>
+      <div class="more"><a target="_blank" href="{:url('Memberfavorites/fglist')}">{$Think.lang.view_all_collections}</a></div>
+    </div>
+    {else /}
+    <dl class="null-tip">
+        <dt class="fa fa-heart-o"></dt>
+      <dd>
+        <h4>{$Think.lang.have_no_collections_yet}</h4>
+        <h5>{$Think.lang.new_promotions_price_cuts}</h5>
+      </dd>
+    </dl>
+    {/notempty}
+  </div>
+</div>
+<div id="favoritesStore" class="normal">
+  <div class="outline">
+    <div class="title">
+      <h3>{$Think.lang.store_collections}</h3>
+    </div>
+    {notempty name="favorites_store_list"}
+    <div class="dsm-favorites-store">
+      <ul id="favoritesStoreList" class="ds-carousel-skin">
+        {foreach name="favorites_store_list" item="favorites" }
+        <li>
+          <div class="dsm-store-pic"><a href="{:url('Store/index',['store_id'=>$favorites.store.store_id])}" ><img alt="" src="{:get_store_logo($favorites['store']['store_avatar'])}"></a></div>
+          <dl>
+            <dt class="dsm-goods-name"><a href="{:url('Store/index',['store_id'=>$favorites.store.store_id])}" title="{$favorites.store.store_name}" >{$favorites.store.store_name}</a></dt>
+            <dd>{$Think.lang.new_products}{$goods_count[$favorites['store']['store_id']]}{$Think.lang.piece}</dd>
+          </dl>
+        </li>
+        {/foreach}
+      </ul>
+      <div class="more"><a target="_blank" href="{:url('Memberfavorites/fslist')}">{$Think.lang.check_all_stores_collection}</a></div>
+    </div>
+    {else /}
+    <dl class="null-tip">
+      <dt class="fa fa-heart-o"></dt>
+      <dd>
+        <h4>{$Think.lang.no_collection_shop}</h4>
+        <h5>{$Think.lang.stores_latest_merchandise_promotions}</h5>
+      </dd>
+    </dl>
+   {/notempty}
+  </div>
+</div>

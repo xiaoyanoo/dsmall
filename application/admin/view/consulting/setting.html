@@ -1,0 +1,50 @@
+{include file="public/header" /}
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>{$Think.lang.ds_consulting}</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+    <div class="fixed-empty"></div>
+    
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="{$Think.lang.ds_explanation_tip}">{$Think.lang.ds_explanation}</h4>
+            <span id="explanationZoom" title="{$Think.lang.ds_explanation_close}" class="arrow"></span>
+        </div>
+        <ul>
+            <li>{$Think.lang.consulting_setting_help1}。</li>
+        </ul>
+    </div>
+    
+    <form method="post" name="form_consultingsetting">
+        <table class="ds-default-table">
+            <tbody>
+            <tr class="noborder">
+                <td class="required"><label>{$Think.lang.consulting_setting_tips}</label></td>
+            </tr>
+            <tr class="noborder">
+                <td class="">
+                    {$build_editor}
+                    <textarea name="consult_prompt" id="consult_prompt">{$setting_list.consult_prompt}</textarea>
+                </td>
+                <td class="vatop tips"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr class="tfoot">
+                <td colspan="2" ><a href="JavaScript:void(0);" class="btn" onclick="document.form_consultingsetting.submit()"><span>{$Think.lang.ds_submit}</span></a></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    
+</div>

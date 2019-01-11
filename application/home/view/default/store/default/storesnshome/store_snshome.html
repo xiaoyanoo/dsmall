@@ -1,0 +1,113 @@
+{extend name="default/base/base_store" /}
+{block name="store_main"}
+
+<script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/jquery.charCount.js"></script> 
+<script type="text/javascript" src="{$Think.HOME_SITE_ROOT}/js/member.js"></script>
+<script type="text/javascript" src="{$Think.HOME_SITE_ROOT}/js/sns_store.js" charset="utf-8"></script>
+<script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/js/smilies/smilies_data.js" charset="utf-8"></script> 
+<script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/js/smilies/smilies.js" charset="utf-8"></script> 
+<script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/jquery.caretInsert.js" charset="utf-8"></script> 
+<script>
+var MAX_RECORDNUM = '{$max_recordnum}';
+</script>
+<div class="cms-sns">
+  <div class="cms-sns-left">
+    <div class="cms-sns-tabmene">
+      <ul>
+        <li><a href="{:url('Storesnshome/index',['sid'=>$store_info.store_id])}" {if condition='$Request.param.type eq ""'}class="selected"{/if}>{$Think.lang.store_sns_all_trends}<i></i></a></li>
+        <li><a href="{:url('Storesnshome/index',['sid'=>$store_info.store_id,'type'=>'promotion'])}" {if condition='$Request.param.type eq "promotion"'}class="selected"{/if}>{$Think.lang.store_sns_sales_promotion}<i></i></a></li>
+        <li><a href="{:url('Storesnshome/index',['sid'=>$store_info.store_id,'type'=>'new'])}" {if condition='$Request.param.type eq "new"'}class="selected"{/if}>{$Think.lang.store_sns_new_goods}<i></i></a></li>
+        <li><a href="{:url('Storesnshome/index',['sid'=>$store_info.store_id,'type'=>'hotsell'])}" {if condition='$Request.param.type eq "hotsell"'}class="selected"{/if}>{$Think.lang.store_sns_hot_sale}<i></i></a></li>
+        <li><a href="{:url('Storesnshome/index',['sid'=>$store_info.store_id,'type'=>'recommend'])}" {if condition='$Request.param.type eq "recommend"'}class="selected"{/if}>{$Think.lang.store_sns_recommended}<i></i></a></li>
+      </ul>
+    </div>
+    <div class="cms-sns-content">
+      {notempty name="strace_array"}
+      <ul class="cms-sns-content-list">
+        {foreach name="strace_array" item="val"}
+        <li id="ds_row_{$val.stracelog_id}">
+          <dl>
+            <dt>
+              <h5>{:parsesmiles($val['stracelog_title'])}</h5>
+              {if $Think.session.store_id == $val.stracelog_storeid}
+              <span class="fd-handle"> <a href="javascript:void(0);" ds_type="sd_del" data-param='{"txtid":"{$val.stracelog_id}"}'>
+                <i class="fa fa-trash-o"></i>{$Think.lang.ds_delete}</a> </span>
+              {/if}
+            </dt>
+            <dd> {:parsesmiles($val['stracelog_content'])}</dd>
+            <dd> <span class="goods-time fl">{$val.stracelog_time|date="Y-m-d H:i",###}</span> <span class="fr"> <a href="javascript:void(0);" ds_type="sd_forwardbtn" data-param='{"txtid":"{$val.stracelog_id}"}'>{$Think.lang.sns_forward}</a>&nbsp;|&nbsp;
+                    <a href="javascript:void(0);" ds_type="sd_commentbtn" data-param='{"txtid":"{$val.stracelog_id}"}'>{$Think.lang.sns_comment}{$val.stracelog_comment|default=''}</a> </span> </dd>
+            <dd> 
+              <!-- 评论模块start -->
+              <div id="tracereply_{$val.stracelog_id}" style="display:none;"></div>
+              <!-- 评论模块end --> 
+              <!-- 转发模块start -->
+              <div id="forward_{$val.stracelog_id}" style="display:none;">
+                <div class="forward-widget">
+                  <div class="forward-edit">
+                    <form id="forwardform_{$val.stracelog_id}" method="post" action="{:url('Storesnshome/addforward')}">
+                      <input type="hidden" name="stid" value="{$val.stracelog_id}"/>
+                      <div class="forward-add">
+                        <textarea resize="none" id="content_forward{$val.stracelog_id}" name="forwardcontent">{$val.stracelog_title}</textarea>
+                        <span class="error"></span> 
+                        <!-- 验证码 -->
+                        <div id="forwardseccode{$val.stracelog_id}" class="seccode" style="display: none;">
+                          <label for="captcha">{$Think.lang.ds_checkcode}{$Think.lang.ds_colon}</label>
+                          <input name="captcha" class="text" type="text" size="4" maxlength="4"/>
+                          <img src="" title="{$Think.lang.wrong_checkcode_change}{$Think.lang.store_sns_content_null}" name="codeimage" onclick="this.src=HOMESITEURL+'/Seccode/makecode?t=' + Math.random()"/> <span>{$Think.lang.wrong_seccode}</span>
+                        </div>
+                        <input type="text" style="display:none;" />
+                        <!-- 防止点击Enter键提交 -->
+                        <div class="act">
+                            <span class="skin-blue"><span class="btn"><a href="javascript:void(0);" ds_type="s_forwardbtn" data-param='{"txtid":"{$val.stracelog_id}"}'>{$Think.lang.sns_forward}</a></span></span>
+                            <span id="forwardcharcount{$val.stracelog_id}" style="float:right;"></span>
+                            <a class="face" ds_type="smiliesbtn" data-param='{"txtid":"forward{$val.stracelog_id}"}' href="javascript:void(0);" >{$Think.lang.sns_smiles}</a>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <ul class="forward-list">
+                  </ul>
+                </div>
+              </div>
+              <!-- 转发模块end -->
+              <div class="clear"></div>
+            </dd>
+          </dl>
+        </li>
+        {/foreach}
+      </ul>
+      <div id="pagehtml" class="tc mt10 mb10">
+        <div class="pagination">{$show_page}</div>
+      </div>
+      {else /}
+      <div class="null">{$Think.lang.store_sns_content_null}</div>
+      {/notempty}
+    </div>
+    <!-- 表情弹出层 -->
+    <div id="smilies_div" class="smilies-module"></div>
+  </div>
+  <div class="cms-sns-right">
+    <div class="cms-sns-right-container">
+      <div class="cms-store-pic"><a><img src="{:get_store_logo($store_info['store_avatar'])}" alt="{$store_info.store_name}" title="{$store_info.store_name}" /></a></div>
+      <dl class="cms-store-info">
+        <dt>{$store_info.store_name}</dt>
+        <dd>{$Think.lang.already_collected}：<em dstype="store_collect">{$store_info.store_collect}</em></dd>
+      </dl>
+      <div class="cms-store-favorites"><a href="javascript:collect_store('{$store_info.store_id}','count','store_collect')" ><i class="fa fa-plus"></i>{$Think.lang.collection_shops}</a></div>
+    </div>
+    <div class="cms-sns-right-container">
+      {notempty name="favorites_list"}
+      <div class="title">{$Think.lang.latest_favorites}</div>
+      <div class="cms-favorites-user">
+        <ul>
+          {foreach name="favorites_list" item="val" }
+          <li><a target="_blank" href="javascript:void(0)"><img alt="{$val.member_name}" title="{$val.member_name}" src="{:get_member_avatar_for_id($val['member_id'])}" /></a></li>
+          {/foreach}
+        </ul>
+      </div>
+      {/notempty}
+    </div>
+  </div>
+</div>
+{/block}

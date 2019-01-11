@@ -1,0 +1,40 @@
+<div id="browseMark" class="double">
+    <div class="outline">
+        <div class="title">
+            <h3>{$Think.lang.my_footprint}</h3>
+        </div>
+        {notempty name="viewed_goods"}
+        <div class="dsm-browse-mark">
+            <ul id="browseMarkList" class="ds-carousel-skin">
+                {foreach name="viewed_goods" item="goods_info" key="goods_id" }
+                <li>
+                    <div class="dsm-goods-pic"><a href="{$goods_info.url}" target="_blank"><img alt="" src="{$goods_info.goods_image}"></a></div>
+                    <dl>
+                        <dt class="dsm-goods-name"><a href="{$goods_info.url}" title="{$goods_info.goods_name}" target="_blank">{$goods_info.goods_name}</a></dt>
+                        <dd class="dsm-goods-price"><em>￥{$goods_info.goods_promotion_price}</em></dd>
+                    </dl>
+                </li>
+                {/foreach}
+            </ul>
+            <div class="more"><a href="{:url('Membergoodsbrowse/listinfo')}" target="_blank">{$Think.lang.view_all_products}</a></div>
+        </div>
+        {else /}
+        <dl class="null-tip">
+            <dt><i class="fa fa-cloud"></i></dt>
+            <dd>
+                <h4>{$Think.lang.browsing_history_empty}</h4>
+                <h5>{$Think.lang.mall_look_promotion}</h5>
+                <p><a target="_blank" href="{:url('Index/index')}" class="dsm-btn-mini">{$Think.lang.browse_products}</a></p>
+            </dd>
+        </dl>
+        {/notempty}
+    </div>
+</div>
+<script>
+//信息轮换
+    $.getScript("{$Think.PLUGINS_SITE_ROOT}/jquery.SuperSlide.2.1.1.js", function() {
+        jQuery('#favoritesGoods').slide({mainCell:"#favoritesGoodsList",effect:"left",autoPlay:true,vis:4});
+        jQuery('#favoritesStore').slide({mainCell:"#favoritesStoreList",effect:"left",autoPlay:true,vis:3});
+        jQuery('#browseMark').slide({mainCell:"#browseMarkList",effect:"left",autoPlay:true,vis:3});
+    });
+</script>

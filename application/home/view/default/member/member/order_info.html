@@ -1,0 +1,105 @@
+<div id="transaction" class="double">
+  <div class="outline">
+    <div class="title">
+      <h3>{$Think.lang.trade_alert}</h3>
+      <ul>
+          <li>
+              {if $home_member_info.order_nopay_count > 0}
+              <a href="{:url('Memberorder/index',['state_type'=>'state_new'])}">{$Think.lang.ds_order_waitpay}<em>{$home_member_info.order_nopay_count}</em></a>
+              {else /}
+              {$Think.lang.ds_order_waitpay}<em>0</em>
+              {/if}
+          </li>
+          <li>
+              {if $home_member_info.order_noreceipt_count > 0}
+              <a href="{:url('Memberorder/index',['state_type'=>'state_send'])}">{$Think.lang.ds_order_receiving}<em>{$home_member_info.order_noreceipt_count}</em></a>
+              {else /}
+              {$Think.lang.ds_order_receiving}<em>0</em>
+              {/if}
+          </li>
+          <li>
+              {if $home_member_info.order_noeval_count > 0}
+              <a href="{:url('Memberorder/index',['state_type'=>'state_noeval'])}">{$Think.lang.ds_order_waitevaluate}<em>{$home_member_info.order_noeval_count}</em></a>
+              {else /}
+              {$Think.lang.ds_order_waitevaluate}<em>0</em>
+              {/if}
+          </li>
+      </ul>
+    </div>
+    {notempty name="order_list"}
+    <div class="order-list">
+      <ul>
+        {foreach name="order_list" item="order_info" key="k" }
+        <li>
+          <div class="dsm-goods-thumb"><a target="_blank" href="{:url('Memberorder/show_order',['order_id'=>$order_info.order_id])}"><img src="{:goods_thumb($order_info['extend_order_goods'][0],240)}" /></a><em>{:count($order_info['extend_order_goods'])}</em></div>
+          <dl class="dsm-goods-info">
+            <dt><a href="{:url('Memberorder/show_order',['order_id'=>$order_info.order_id])}" target="_blank">{$order_info['extend_order_goods'][0]['goods_name']}</a>
+              {if count($order_info['extend_order_goods']) > 1}
+              <span>{$Think.lang.wait}<strong>{:count($order_info['extend_order_goods'])}</strong>{$Think.lang.planting_goods}</span>
+              {/if}
+            </dt>
+            <dd><span class="order-date">{$Think.lang.order_time}：{$order_info.add_time|date="Y-m-d H:i:s",###}</span><span class="dsm-order-price">{$Think.lang.order_amount}：<em>￥{$order_info.order_amount}</em></span></dd>
+            <dd><span class="order-state">{$Think.lang.order_status}：{:strip_tags(get_order_state($order_info))}
+              {if $order_info.if_deliver}
+              <a href='{:url('Memberorder/search_deliver',['order_id'=>$order_info.order_id,'order_sn'=>$order_info.order_sn])}' target="_blank"><i class="fa fa-truck"></i>{$Think.lang.view_logistics}</a>
+              {/if}
+              </span> </dd>
+          </dl>
+          {if $order_info.if_payment}
+          <a href="{:url('Buy/pay',['pay_sn'=>$order_info.pay_sn])}" target="_blank" class="dsm-btn">{$Think.lang.order_payment}</a>
+          {/if}
+          {if $order_info.if_receive}
+          <a href="{:url('Memberorder/show_order',['order_id'=>$order_info.order_id])}" target="_blank" class="dsm-btn">{$Think.lang.confirm_receipt}</a>
+          {/if}
+          {if $order_info.if_evaluation && $order_info.refund_state==0}
+          <a href="{:url('Memberevaluate/add',['order_id'=>$order_info.order_id])}" target="_blank" class="dsm-btn">{$Think.lang.transaction_evaluation}</a>
+          {/if}
+          {if !$order_info['if_payment'] && !$order_info['if_receive'] && !$order_info['if_evaluation']}
+          <a href="{:url('Memberorder/show_order',['order_id'=>$order_info.order_id])}" target="_blank" class="dsm-btn">{$Think.lang.view_order}</a>
+          {/if}
+        </li>
+        {/foreach}
+      </ul>
+    </div>
+    {else /}
+    <dl class="null-tip">
+        <dt class="fa fa-truck"></dt>
+      <dd>
+        <h4>{$Think.lang.long_time_mall_shopping}</h4>
+        <h5>{$Think.lang.understand_order_status_logistics}</h5>
+      </dd>
+    </dl>
+    {/notempty}
+  </div>
+</div>
+<div id="shopping" class="normal">
+  <div class="outline">
+    <div class="title">
+      <h3>{$Think.lang.shopping_cart}</h3>
+    </div>
+    {notempty name="cart_list"}
+    <div class="cart-list">
+      <ul>
+        {foreach name="cart_list" item="cart_info" }
+        <li>
+          <div class="dsm-goods-thumb"><a target="_blank" href="{:url('Goods/index',['goods_id'=>$cart_info.goods_id])}"><img src="{:goods_thumb($cart_info,240)}"></a></div>
+          <dl class="dsm-goods-info">
+            <dt><a href="{:url('Goods/index',['goods_id'=>$cart_info.goods_id])}">{$cart_info.goods_name}</a></dt>
+            <dd><span class="dsm-order-price">{$Think.lang.mall_price}：<em>￥{$cart_info.goods_price}</em></span><!-- <span class="sale">限时折扣</span> --></dd>
+          </dl>
+        </li>
+        {/foreach}
+      </ul>
+      <div class="more"><a href="{:url('Cart/index')}">{$Think.lang.view_all_items_cart}</a></div>
+    </div>
+    {else /}
+    <dl class="null-tip">
+        <dt class="fa fa-shopping-bag"></dt>
+      <dd>
+        <h4>{$Think.lang.shopping_cart_still_empty}</h4>
+        <h5>{$Think.lang.with_settlement}</h5>
+      </dd>
+    </dl>
+    {/notempty}
+  </div>
+</div>

@@ -1,0 +1,31 @@
+{extend name="default/base/base_home" /}
+{block name="mall_main"}
+
+
+<div class="w1200">
+    <div class="dsh-all-menu">
+        <ul class="tab-bar">
+            <li><a href="{:url('Category/goods')}">{$Think.lang.category_all_categories}</a></li>
+            <li><a href="{:url('Brand/index')}">{$Think.lang.category_all_brands}</a></li>
+            <li><a href="{:url('Search/index')}">{$Think.lang.category_all_products}</a></li>
+            <li class="current"><a href="">{$Think.lang.category_all_store_categories}</a></li>
+        </ul>
+    </div>
+    <div class="all-category-items">
+        <ul>
+            {notempty name='sc_list'}  
+            {foreach $sc_list as $sc}  
+            <li class="category-list"> <a href="{:url('Storelist/index',['cate_id'=>$sc.storeclass_id])}">{$sc.storeclass_name}</a> </li>
+            {/foreach}
+            {/notempty}
+        </ul>
+    </div>
+    
+</div>
+
+
+
+{/block}
+
+
+

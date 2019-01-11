@@ -1,0 +1,108 @@
+{include file="public/header" /}
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>{$Think.lang.ds_article}</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    
+    <form id="article_form" method="post">
+        <table class="ds-default-table">
+            <tbody>
+                <tr class="noborder"> 
+                    <td class="required w120">{$Think.lang.article_title}</td>
+                    <td class="vatop rowform"><input type="text" name="article_title" id="article_title" value="{$article.article_title}" class="w200"/></td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr class="noborder"> 
+                    <td class="required">{$Think.lang.article_cate}</td>
+                    <td class="vatop rowform">
+                        <select name="ac_id">
+                            <option value="">{$Think.lang.ds_please_choose}</option>
+                            {foreach name="ac_list" item="cate"}
+                            <option value="{$cate.ac_id}" {if $cate.ac_id === $article.ac_id }selected{/if}>{if $cate.ac_parent_id > 0}&nbsp&nbsp{/if}{$cate.ac_name}</option>
+                            {/foreach}
+                        </select>
+                    </td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr class="noborder"> 
+                    <td class="required">{$Think.lang.article_url}</td>
+                    <td class="vatop rowform"><input type="text" name="article_url" id="article_url" value="{$article.article_url}" class="w200"/></td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr class="noborder"> 
+                    <td class="required">{$Think.lang.article_show}</td>
+                    <td class="vatop rowform onoff">
+                        <label for="article_show1" class="cb-enable {if $article.article_show == '1'}selected{/if}" ><span>{$Think.lang.ds_yes}</span></label>
+                        <label for="article_show2" class="cb-disable {if $article.article_show == '0'}selected{/if}" ><span>{$Think.lang.ds_no}</span></label>
+                        <input id="article_show1" name="article_show" {if $article.article_show == '1'}checked="checked"{/if}  value="1" type="radio">
+                        <input id="article_show2" name="article_show" {if $article.article_show == '0'}checked="checked"{/if} value="0" type="radio">
+                    </td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr class="noborder"> 
+                    <td class="required">{$Think.lang.article_sort}</td>
+                    <td class="vatop rowform"><input type="text" name="article_sort" id="article_sort" value="{$article.article_sort}" class="w200"/></td>
+                    <td class="vatop tips"></td>
+                </tr>
+                <tr class="noborder"> 
+                    <td class="required">{$Think.lang.article_content}</td>
+                    {:build_editor(['name'=>'article_content','content'=>$article.article_content])}
+                    <td class="vatop rowform" colspan="2"><textarea name="article_content" id="article_content" style="width:100%;"></textarea></td>
+                </tr>					
+            </tbody>
+            <tfoot>
+                <tr class="tfoot">
+                    <td colspan="15"><input id="submitBtn" class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                </tr>	
+            </tfoot>
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#submitBtn").click(function() {
+            if ($("#article_form").valid()) {
+                $("#article_form").submit();
+            }
+        });
+        $('#article_form').validate({
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().parent().find('td:last'));
+            },
+            rules: {
+                article_title : {
+                    required: true
+                },
+                article_url :{
+                    url : true
+                },
+                article_sort :{
+                    number:true,
+                    range:[0,255]
+                }
+            },
+            messages: {
+                article_title : {
+                    required   : '{$Think.lang.article_title_error}'
+                },
+                article_url :{
+                    url : '{$Think.lang.ds_url_error}'
+                },
+                article_sort:{
+                    number: '{$Think.lang.article_sort_error}',
+                    range:'{$Think.lang.class_sort_explain}'
+                }
+            }
+        });
+    });
+</script>
